@@ -4,8 +4,10 @@ LABEL org.opencontainers.image.source=https://github.com/AsamK/signal-cli
 LABEL org.opencontainers.image.description="signal-cli provides an unofficial commandline, dbus and JSON-RPC interface for the Signal messenger."
 LABEL org.opencontainers.image.licenses=GPL-3.0-only
 
-RUN useradd signal-cli --system --create-home --home-dir /var/lib/signal-cli
+RUN groupadd --gid 101 signal-cli && useradd --uid 101 --gid 101 --system --create-home --home-dir /var/lib/signal-cli signal-cli
 ADD build/install/signal-cli /opt/signal-cli
 
 USER signal-cli
-ENTRYPOINT ["/opt/signal-cli/bin/signal-cli", "--config=/var/lib/signal-cli"]
+ENTRYPOINT ["/opt/signal-cli/bin/signal-cli"]
+
+VOLUME ["/var/lib/signal-cli"]
